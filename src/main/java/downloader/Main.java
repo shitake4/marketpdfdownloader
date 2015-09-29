@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import downloader.checker.Directory;
 import downloader.download.PdfDownload;
 import downloader.parser.parserWrapper;
 
@@ -15,6 +16,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		Directory dir = new Directory();
+		dir.existDirectory();
+
 		LocalDateTime downloadTime = LocalDateTime.now();
 		logger.info(downloadTime.toString() + "のデータ取得を開始します");
 

@@ -31,7 +31,7 @@ public class parserWrapper {
 		// 一時保存ファイルの取得
 		ZonedDateTime now = ZonedDateTime.now();
 		String nowString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		File fOld = new File(rb.getString("tmpPath") + nowString
+		File fOld = new File(rb.getString("filePath") + nowString
 				+ rb.getString("fileName"));
 
 		// 新規ファイル名の作成
@@ -52,7 +52,7 @@ public class parserWrapper {
 		// 一時保存ファイルの取得
 		ZonedDateTime now = ZonedDateTime.now();
 		String nowString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		File f = new File(rb.getString("tmpPath") + nowString
+		File f = new File(rb.getString("filePath") + nowString
 				+ rb.getString("fileName"));
 
 		if (f.exists()) {
@@ -88,7 +88,7 @@ public class parserWrapper {
 		ZonedDateTime now = ZonedDateTime.now();
 		String nowString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-		String fileName = rb.getString("tmpPath") + nowString
+		String fileName = rb.getString("filePath") + nowString
 				+ rb.getString("fileName");
 		return parser.pdfToText(fileName);
 	}
