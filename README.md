@@ -3,6 +3,7 @@
 #### ディレクトリ構成 ####
 ※必ず下記ディレクトリ構成にすること
 ~~~~
-D:\seikapdf\ichiba
-D:\seikapdf\tmp
+donwloader.jar ┐
+seikapdfichiba ├ ichiba
+               └ tmp
 ~~~~
