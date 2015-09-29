@@ -28,7 +28,7 @@ public class PdfDownload {
 			String nowString = now.format(DateTimeFormatter
 					.ofPattern("yyyyMMdd"));
 
-			File file = new File(rb.getString("tmpPath") + nowString
+			File file = new File(rb.getString("filePath") + nowString
 					+ rb.getString("fileName"));
 			out = new FileOutputStream(file, false);
 			int b;
