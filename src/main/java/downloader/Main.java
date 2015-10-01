@@ -34,9 +34,10 @@ public class Main {
 
 		// pdf名の変更
 		parserWrapper parser = new parserWrapper();
+		logger.info("pdfファイル名変更を行います");
 		boolean result = parser.changeFileName();
 		if (result) {
-			logger.info("pdfファイル名変更を行います");
+			logger.info("pdf一時保存を破棄します");
 			boolean delResult = parser.deleteFile();
 			if (delResult) {
 				logger.info("pdfファイル名変更を完了しました");

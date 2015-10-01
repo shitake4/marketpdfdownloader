@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import downloader.checker.Directory;
+
 public class parserWrapper {
 	private Logger logger = LoggerFactory.getLogger(parserWrapper.class
 			.getName());
@@ -27,6 +29,7 @@ public class parserWrapper {
 
 	public boolean changeFileName() {
 		String getDate = getCreateDate();
+		String fileDate = getyyyyDD();
 
 		// 一時保存ファイルの取得
 		ZonedDateTime now = ZonedDateTime.now();
@@ -34,9 +37,12 @@ public class parserWrapper {
 		File fOld = new File(rb.getString("filePath") + nowString
 				+ rb.getString("fileName"));
 
+		Directory directory = new Directory();
+		directory.existDirectory(fileDate);
+
 		// 新規ファイル名の作成
-		File fNew = new File(rb.getString("filePath") + getDate
-				+ rb.getString("fileNameJp"));
+		File fNew = new File(rb.getString("filePath") + "//" + fileDate + "//"
+				+ getDate + rb.getString("fileNameJp"));
 		if (fOld.exists()) {
 			// ファイル名変更実行
 			fOld.renameTo(fNew);
@@ -80,6 +86,29 @@ public class parserWrapper {
 
 			JapaneseDate d2 = JapaneseDate.from(f.parse(regStr));
 			return LocalDate.from(d2).toString();// 2015-05-16
+		}
+		return null;
+	}
+
+	private String getyyyyDD() {
+		String pdfDate = tmppdfToText();
+
+		String[] subString = StringUtils.split(pdfDate, "\r\n");
+
+		String regex = ".+\\d+年\\d+月\\d+日";
+		Pattern p = Pattern.compile(regex);
+
+		Matcher m = p.matcher(subString[2]);
+		if (m.find()) {
+			String regStr = m.group();
+
+			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gy年M月d日")
+					.withChronology(JapaneseChronology.INSTANCE);
+
+			JapaneseDate jpnDate = JapaneseDate.from(f.parse(regStr));
+
+			DateTimeFormatter formater = DateTimeFormatter.ofPattern("yyyy_MM");
+			return LocalDate.from(jpnDate).format(formater);
 		}
 		return null;
 	}
