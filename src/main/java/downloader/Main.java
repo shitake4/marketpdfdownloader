@@ -16,31 +16,32 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		LocalDateTime downloadTime = LocalDateTime.now();
+		logger.info(downloadTime.toString() + "ä½œæ¥­ã‚’é–‹å§‹ã—ã¾ã™");
+
 		Directory dir = new Directory();
 		dir.existDirectory();
 
-		LocalDateTime downloadTime = LocalDateTime.now();
-		logger.info(downloadTime.toString() + "‚Ìƒf[ƒ^æ“¾‚ğŠJn‚µ‚Ü‚·");
-
-		// pdfƒtƒ@ƒCƒ‹‚Ìƒ_ƒEƒ“ƒ[ƒh
+		// PDFãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
 		try {
 			PdfDownload pdf = new PdfDownload();
 			pdf.getFIle();
-			logger.info("pdf‚Ìƒ_ƒEƒ“ƒ[ƒh‚ªŠ®—¹‚µ‚Ü‚µ‚½B");
+			logger.info("pdfä¸€æ™‚ä¿å­˜å®Œäº†ã—ã¾ã—ãŸ");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			logger.error("pdfDownloadError :", e);
 		}
 
-		// pdfƒtƒ@ƒCƒ‹–¼‚Ì•ÏX
+		// pdfåã®å¤‰æ›´
 		parserWrapper parser = new parserWrapper();
 		boolean result = parser.changeFileName();
 		if (result) {
-			logger.info("pdf‚Ìƒtƒ@ƒCƒ‹–¼•ÏX‚ªŠ®—¹‚µ‚Ü‚µ‚½");
+			logger.info("pdfãƒ•ã‚¡ã‚¤ãƒ«åå¤‰æ›´ã‚’è¡Œã„ã¾ã™");
 			boolean delResult = parser.deleteFile();
 			if (delResult) {
-				logger.info("pdfƒtƒ@ƒCƒ‹‚Ìíœ‚ªŠ®—¹‚µ‚Ü‚µ‚½");
+				logger.info("pdfãƒ•ã‚¡ã‚¤ãƒ«åå¤‰æ›´ã‚’å®Œäº†ã—ã¾ã—ãŸ");
 			}
 		}
+		logger.info(downloadTime.toString() + "ä½œæ¥­ã‚’çµ‚äº†ã—ã¾ã™");
 	}
 }

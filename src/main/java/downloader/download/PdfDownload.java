@@ -15,15 +15,14 @@ public class PdfDownload {
 	private ResourceBundle rb = ResourceBundle.getBundle("properties");
 
 	public void getFIle() throws IOException {
-		// Ú‘±æİ’è
 		URL url = new URL(rb.getString("downloadLocation"));
 		URLConnection conn = url.openConnection();
-		// ‰Šú‰»
+
 		InputStream in = null;
 		FileOutputStream out = null;
 		try {
 			in = conn.getInputStream();
-			// Œ»İæ“¾
+
 			ZonedDateTime now = ZonedDateTime.now();
 			String nowString = now.format(DateTimeFormatter
 					.ofPattern("yyyyMMdd"));
