@@ -1,0 +1,3 @@
+11:55:58.763 [default] INFO  [main] downloader.Main [Main.java:23] 2015-10-01T11:55:58.761作業を開始します
+11:55:59.060 [default] INFO  [main] downloader.Main [Main.java:29] pdf一時保存完了しました
+11:55:59.756 [default] INFO  [main] downloader.Main [Main.java:39] pdfファイル名変更を行います
