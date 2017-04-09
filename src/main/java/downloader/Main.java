@@ -29,6 +29,7 @@ public class Main {
 		target2.put("url", "http://kei008220.webcrow.jp/seikamitoshi.pdf");
 		target2.put("filename", "入荷価格見通し.pdf");
 		target2.put("path", "predictionpdf");
+		targets.add(target2);
 
 		targets.stream().forEach(entry -> {
 			// TODO Auto-generated method stub
