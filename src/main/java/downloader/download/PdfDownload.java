@@ -15,6 +15,7 @@ public class PdfDownload {
 	private String url;
 	private String fileName;
 	private String path;
+	private String FS = File.separator;
 	private ResourceBundle rb = ResourceBundle.getBundle("properties");
 	private PdfDownload(){
 
@@ -39,7 +40,7 @@ public class PdfDownload {
 			String nowString = now.format(DateTimeFormatter
 					.ofPattern("yyyyMMdd"));
 
-			File file = new File(this.path + "¥¥" + nowString + this.fileName);
+			File file = new File(this.path + FS + nowString + this.fileName);
 			out = new FileOutputStream(file, false);
 			int b;
 			while ((b = in.read()) != -1) {

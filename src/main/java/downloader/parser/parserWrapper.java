@@ -21,12 +21,13 @@ public class parserWrapper {
 			.getName());
 	private ResourceBundle rb = ResourceBundle.getBundle("properties");
 	private PdfParser parser = new PdfParser();
-	public String pdfToText(String fileName) {
-		return parser.pdfToText(fileName);
-	}
 	private String filename;
 	private String url;
 	private String path;
+	private String FS = File.separator; 
+	public String pdfToText(String fileName) {
+		return parser.pdfToText(fileName);
+	}
 
 	private parserWrapper(){
 
@@ -44,14 +45,14 @@ public class parserWrapper {
 		// 一時保存ファイルの取得
 		ZonedDateTime now = ZonedDateTime.now();
 		String nowString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		File fOld = new File(this.path + "¥¥" + nowString
+		File fOld = new File(this.path + FS + nowString
 				+ this.filename);
 
 		Directory directory = new Directory(this.path);
 		directory.existDirectory(fileDate);
 
 		// 新規ファイル名の作成
-		File fNew = new File(this.path + "¥¥" +  fileDate + "¥¥"
+		File fNew = new File(this.path + FS + fileDate + FS
 				+ getDate + this.filename);
 		if (fOld.exists()) {
 			// ファイル名変更実行
@@ -68,7 +69,7 @@ public class parserWrapper {
 		// 一時保存ファイルの取得
 		ZonedDateTime now = ZonedDateTime.now();
 		String nowString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		File f = new File(this.path + "¥¥" + nowString
+		File f = new File(this.path + FS + nowString
 				+ this.filename);
 
 		if (f.exists()) {
@@ -84,14 +85,14 @@ public class parserWrapper {
 
 		String[] subString = StringUtils.split(pdfDate, "\r\n");
 
-		String regex = ".+¥¥d+年¥¥d+月¥¥d+日";
+		String regex = ".+\\d+年\\d+月\\d+日";
 		Pattern p = Pattern.compile(regex);
 
 		Matcher m = p.matcher(subString[2]);
 		if (m.find()) {
 			String regStr = m.group();
 
-			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gy年M月d日")
+			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gyy年MM月dd日")
 					.withChronology(JapaneseChronology.INSTANCE);
 
 			JapaneseDate d2 = JapaneseDate.from(f.parse(regStr));
@@ -105,7 +106,7 @@ public class parserWrapper {
 
 		String[] subString = StringUtils.split(pdfDate, "\r\n");
 
-		String regex = ".+¥¥d+年¥¥d+月¥¥d+日";
+		String regex = ".+\\d+年\\d+月\\d+日";
 		Pattern p = Pattern.compile(regex);
 
 		Matcher m = p.matcher(subString[2]);
@@ -127,7 +128,7 @@ public class parserWrapper {
 		ZonedDateTime now = ZonedDateTime.now();
 		String nowString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-		String fileName = this.path + "¥¥" + nowString
+		String fileName = this.path + FS + nowString
 				+ this.filename;
 		return parser.pdfToText(fileName);
 	}
