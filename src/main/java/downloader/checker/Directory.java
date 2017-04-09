@@ -12,9 +12,13 @@ public class Directory {
 	private static Logger logger = LoggerFactory
 			.getLogger(Main.class.getName());
 	private ResourceBundle rb = ResourceBundle.getBundle("properties");
+	private String path;
+	public Directory(String targetPath){
+		this.path = targetPath;
+	}
 
 	public void existDirectory() {
-		File f = new File(rb.getString("filePath"));
+		File f = new File(this.path);
 
 		if (!f.exists()) {
 			f.mkdirs();
@@ -22,7 +26,7 @@ public class Directory {
 	}
 
 	public void existDirectory(String path) {
-		File f = new File(rb.getString("filePath") + path);
+		File f = new File(this.path);
 
 		if (!f.exists()) {
 			f.mkdirs();

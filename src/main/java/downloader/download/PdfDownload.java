@@ -12,10 +12,22 @@ import java.util.ResourceBundle;
 
 public class PdfDownload {
 
+	private String url;
+	private String fileName;
+	private String path;
 	private ResourceBundle rb = ResourceBundle.getBundle("properties");
+	private PdfDownload(){
+
+	}
+
+	public PdfDownload(String targetFileName, String targetUrl, String targetPath){
+		fileName = targetFileName;
+		url = targetUrl;
+		path = targetPath;
+	}
 
 	public void getFIle() throws IOException {
-		URL url = new URL(rb.getString("downloadLocation"));
+		URL url = new URL(this.url);
 		URLConnection conn = url.openConnection();
 
 		InputStream in = null;
@@ -27,8 +39,7 @@ public class PdfDownload {
 			String nowString = now.format(DateTimeFormatter
 					.ofPattern("yyyyMMdd"));
 
-			File file = new File(rb.getString("filePath") + nowString
-					+ rb.getString("fileName"));
+			File file = new File(this.path + "¥¥" + nowString + this.fileName);
 			out = new FileOutputStream(file, false);
 			int b;
 			while ((b = in.read()) != -1) {
@@ -37,7 +48,6 @@ public class PdfDownload {
 			out.close();
 			in.close();
 		} catch (Exception e) {
-			// TODO: handle exception
 			throw new IOException(e);
 		} finally {
 		}
