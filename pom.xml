@@ -2,9 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>shitake4</groupId>
   <artifactId>downloader</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   
   <dependencies>
+  <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+  <dependency>
+   <groupId>commons-io</groupId>
+   <artifactId>commons-io</artifactId>
+   <version>2.5</version>
+  </dependency>
   <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-api</artifactId>
