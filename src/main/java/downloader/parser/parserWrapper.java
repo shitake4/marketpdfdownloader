@@ -6,6 +6,7 @@ import java.time.ZonedDateTime;
 import java.time.chrono.JapaneseChronology;
 import java.time.chrono.JapaneseDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,6 +57,7 @@ public class parserWrapper {
 				+ getDate + this.filename);
 		if (fOld.exists()) {
 			// ファイル名変更実行
+			FileUti
 			fOld.renameTo(fNew);
 			return true;
 		} else {
@@ -92,8 +94,8 @@ public class parserWrapper {
 		if (m.find()) {
 			String regStr = m.group();
 
-			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gyy年MM月dd日")
-					.withChronology(JapaneseChronology.INSTANCE);
+			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gy年M月d日")
+					.withChronology(JapaneseChronology.INSTANCE).withLocale(Locale.JAPAN);
 
 			JapaneseDate d2 = JapaneseDate.from(f.parse(regStr));
 			return LocalDate.from(d2).toString();// 2015-05-16
@@ -114,7 +116,7 @@ public class parserWrapper {
 			String regStr = m.group();
 
 			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gy年M月d日")
-					.withChronology(JapaneseChronology.INSTANCE);
+					.withChronology(JapaneseChronology.INSTANCE).withLocale(Locale.JAPAN);
 
 			JapaneseDate jpnDate = JapaneseDate.from(f.parse(regStr));
 
