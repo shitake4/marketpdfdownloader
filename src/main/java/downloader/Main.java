@@ -21,7 +21,7 @@ public class Main {
 	public static void main(String[] args) {
 		Map<String, String> target1 = new HashMap<String, String>();
 		target1.put("url", "http://kei008220.webcrow.jp/seika.pdf");
-		target1.put("filename", "仙台青果市場.pdf");
+		target1.put("filename", "仙台市中央市場日報.pdf");
 		target1.put("path", "seikapdf");
 		targets.add(target1);
 

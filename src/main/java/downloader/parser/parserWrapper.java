@@ -1,6 +1,7 @@
 package downloader.parser;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.chrono.JapaneseChronology;
@@ -11,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +41,7 @@ public class parserWrapper {
 		this.path = targetPath;
 	}
 
-	public boolean changeFileName() {
+	public boolean changeFileName(){
 		String getDate = getCreateDate();
 		String fileDate = getyyyyDD();
 
@@ -52,13 +54,19 @@ public class parserWrapper {
 		Directory directory = new Directory(this.path);
 		directory.existDirectory(fileDate);
 
+		if (fileDate == null) fileDate = nowString.substring(0,6);
+		if (getDate == null) getDate = nowString;
+
 		// 新規ファイル名の作成
 		File fNew = new File(this.path + FS + fileDate + FS
 				+ getDate + this.filename);
 		if (fOld.exists()) {
 			// ファイル名変更実行
-			FileUti
-			fOld.renameTo(fNew);
+			try {
+				FileUtils.moveFile(fOld, fNew);
+			} catch (IOException e) {
+				logger.error("同じファイルが存在してます",e);
+			}
 			return true;
 		} else {
 			logger.error("ファイルが存在しません。");
