@@ -38,7 +38,7 @@ public class Main {
 			logger.info("-TargetURL:"+ entry.get("filename"));
 
 			Directory dir = new Directory(entry.get("path"));
-			dir.existDirectory();
+			dir.mkdir();
 
 			// PDFダウンロード
 			try {

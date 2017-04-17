@@ -6,14 +6,10 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.chrono.JapaneseChronology;
 import java.time.chrono.JapaneseDate;
-import java.time.chrono.JapaneseEra;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -27,7 +23,6 @@ import downloader.checker.Directory;
 public class parserWrapper {
 	private Logger logger = LoggerFactory.getLogger(parserWrapper.class
 			.getName());
-	private ResourceBundle rb = ResourceBundle.getBundle("properties");
 	private PdfParser parser = new PdfParser();
 	private String filename;
 	private String url;
@@ -47,24 +42,20 @@ public class parserWrapper {
 	}
 
 	public boolean changeFileName(){
-		String getDate = getCreateDate();
-		String fileDate = getyyyyDD();
+		LocalDate file_date = extractFileDate();
+		String yyyy_mm = file_date.format(DateTimeFormatter.ofPattern("yyyy_MM"));
 
 		// 一時保存ファイルの取得
-		ZonedDateTime now = ZonedDateTime.now();
-		String nowString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		File fOld = new File(this.path + FS + nowString
-				+ this.filename);
+		String now = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+		File fOld = new File(this.path + FS + now + this.filename);
 
 		Directory directory = new Directory(this.path);
-		directory.existDirectory(fileDate);
+		directory.mkdir(yyyy_mm);
 
-		if (fileDate == null) fileDate = nowString.substring(0,6);
-		if (getDate == null) getDate = nowString;
-
+		if (yyyy_mm == null) yyyy_mm = now.substring(0,6);
+		String fileDateStr = file_date == null ? now : file_date.toString();
 		// 新規ファイル名の作成
-		File fNew = new File(this.path + FS + fileDate + FS
-				+ getDate + this.filename);
+		File fNew = new File(this.path + FS + yyyy_mm + FS + fileDateStr + this.filename);
 		if (fOld.exists()) {
 			// ファイル名変更実行
 			try {
@@ -84,8 +75,7 @@ public class parserWrapper {
 		// 一時保存ファイルの取得
 		ZonedDateTime now = ZonedDateTime.now();
 		String nowString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		File f = new File(this.path + FS + nowString
-				+ this.filename);
+		File f = new File(this.path + FS + nowString + this.filename);
 
 		if (f.exists()) {
 			// 削除実行
@@ -95,88 +85,36 @@ public class parserWrapper {
 		return false;
 	}
 
-	private String getCreateDate() {
-		String pdfDate = tmppdfToText();
+	private LocalDate extractFileDate() {
+		String pdfDate = pdfToText();
 		pdfDate = StringUtils.deleteWhitespace(pdfDate);
 
 		String[] subString = StringUtils.split(pdfDate, "\r\n");
-		DateTimeFormatter f2 = DateTimeFormatter.ofPattern("G")
-				.withChronology(JapaneseChronology.INSTANCE).withLocale(Locale.JAPAN);
-		JapaneseDate d = JapaneseDate.now();
+		String regex = getWarekiFormat();
 
-		String regex =  f2.format(d) + "\\d+年\\d+月\\d+日";
 		Pattern p = Pattern.compile(regex);
 
 		List<String> matchedStr = Arrays.stream(subString).map(s -> p.matcher(s)).filter(matcher -> matcher.find()).map(matcher -> matcher.group()).collect(Collectors.toList());
-
 		if (0 < matchedStr.size()){
 			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gy年M月d日")
 					.withChronology(JapaneseChronology.INSTANCE).withLocale(Locale.JAPAN);
 
 			JapaneseDate d2 = JapaneseDate.from(f.parse(matchedStr.get(0)));
-			return LocalDate.from(d2).toString();// 2015-05-16
+			return LocalDate.from(d2);// 2015-05-16
 		}
-
-
-//		Matcher m = p.matcher(subString[2]);
-//		if (m.find()) {
-//			String regStr = m.group();
-//
-//			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gy年M月d日")
-//					.withChronology(JapaneseChronology.INSTANCE).withLocale(Locale.JAPAN);
-//
-//			JapaneseDate d2 = JapaneseDate.from(f.parse(regStr));
-//			return LocalDate.from(d2).toString();// 2015-05-16
-//		}
 		return null;
 	}
 
-	private String getyyyyDD() {
-		String pdfDate = tmppdfToText();
-		pdfDate = StringUtils.deleteWhitespace(pdfDate);
-
-		String[] subString = StringUtils.split(pdfDate, "\r\n");
-		DateTimeFormatter f2 = DateTimeFormatter.ofPattern("G")
-				.withChronology(JapaneseChronology.INSTANCE).withLocale(Locale.JAPAN);
+	private String getWarekiFormat() {
+		DateTimeFormatter f2 = DateTimeFormatter.ofPattern("G").withChronology(JapaneseChronology.INSTANCE).withLocale(Locale.JAPAN);
 		JapaneseDate d = JapaneseDate.now();
-
-		String regex =  f2.format(d) + "\\d+年\\d+月\\d+日";
-		Pattern p = Pattern.compile(regex);
-
-		List<String> matchedStr = Arrays.stream(subString).map(s -> p.matcher(s)).filter(matcher -> matcher.find()).map(matcher -> matcher.group()).collect(Collectors.toList());
-
-		if (0 < matchedStr.size()){
-			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gy年M月d日")
-					.withChronology(JapaneseChronology.INSTANCE).withLocale(Locale.JAPAN);
-
-			JapaneseDate jpnDate = JapaneseDate.from(f.parse(matchedStr.get(0)));
-
-			DateTimeFormatter formater = DateTimeFormatter.ofPattern("yyyy_MM");
-			return LocalDate.from(jpnDate).format(formater);
-		}
-
-//		Matcher m = p.matcher(subString[2]);
-//		if (m.find()) {
-//			String regStr = m.group();
-//
-//			DateTimeFormatter f = DateTimeFormatter.ofPattern("Gy年M月d日")
-//					.withChronology(JapaneseChronology.INSTANCE).withLocale(Locale.JAPAN);
-//
-//			JapaneseDate jpnDate = JapaneseDate.from(f.parse(regStr));
-//
-//			DateTimeFormatter formater = DateTimeFormatter.ofPattern("yyyy_MM");
-//			return LocalDate.from(jpnDate).format(formater);
-//		}
-		return null;
+		return f2.format(d) + "\\d+年\\d+月\\d+日";
 	}
 
-	private String tmppdfToText() {
-		ZonedDateTime now = ZonedDateTime.now();
-		String nowString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
-		String fileName = this.path + FS + nowString
-				+ this.filename;
-		return parser.pdfToText(fileName);
+	private String pdfToText() {
+		String nowStr = ZonedDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+		String filePath = this.path + FS + nowStr + this.filename;
+		return parser.pdfToText(filePath);
 	}
 
 }

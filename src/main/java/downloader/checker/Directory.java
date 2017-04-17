@@ -11,23 +11,23 @@ import downloader.Main;
 public class Directory {
 	private static Logger logger = LoggerFactory
 			.getLogger(Main.class.getName());
-	private ResourceBundle rb = ResourceBundle.getBundle("properties");
 	private String path;
-	public Directory(String targetPath){
-		this.path = targetPath;
+	private String FS = File.separator;
+
+	private Directory(){}
+	public Directory(String path){
+		this.path = path;
 	}
 
-	public void existDirectory() {
+	public void mkdir() {
 		File f = new File(this.path);
-
 		if (!f.exists()) {
 			f.mkdirs();
 		}
 	}
 
-	public void existDirectory(String path) {
-		File f = new File(this.path);
-
+	public void mkdir(String path) {
+		File f = new File(this.path + FS + path);
 		if (!f.exists()) {
 			f.mkdirs();
 		}
